@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- Google Search Verification Tag -->
+  <meta name="google-site-verification" content="PASTE_YOUR_GOOGLE_VERIFICATION_CODE_HERE" />
+  
+  <title data-i18n="page_title">BLACK ARCHIVE - Dark Story Vault</title>
+  
+  <!-- Browser Tab Icon (Favicon) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%23e60026' d='M256 0C114.6 0 0 114.6 0 256c0 78.5 35.4 148.8 91 195.8V480c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32v-16h72v16c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32v-28.2c55.6-47 91-117.3 91-195.8 0-141.4-114.6-256-256-256zm-80 320c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm160 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z'/></svg>" />
+
+  <!-- External Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@300;400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+Sinhala:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- External CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- Welcome Overlay -->
+    <div id="welcomeOverlay" class="welcome-overlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+        <div class="welcome-card">
+            <div class="welcome-icon" aria-hidden="true"><i class="fa-solid fa-book-skull"></i></div>
+            <div class="welcome-eyebrow" data-i18n="welcomeEyebrow">WELCOME TO</div>
+            <h1 id="welcomeTitle" data-i18n="siteName">BLACK ARCHIVE</h1>
+            <p class="welcome-subtitle" data-i18n="welcomeSubtitle">Dark Story Vault</p>
+            <div class="welcome-divider"></div>
+            <p class="welcome-message" data-i18n="welcomeMessage">
+                Enter a vault of dark stories, mysterious worlds, and unforgettable characters.
+            </p>
+            <p class="welcome-reader" data-i18n="readerName">Reader: RODI</p>
+            <button id="welcomeOkBtn" class="welcome-ok-btn" type="button">
+                <i class="fa-solid fa-door-open"></i>
+                <span data-i18n="welcomeContinue">OK — ENTER THE ARCHIVE</span>
+            </button>
+        </div>
+    </div>
+
+
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <i class="fa-solid fa-skull"></i>
+      <span data-i18n="brand_name">Black Archive</span>
+    </div>
+    
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" id="search-input" data-i18n-placeholder="search_placeholder" placeholder="Search archive, authors, tags..." />
+    </div>
+
+    <div class="nav-actions">
+      <!-- Language Selector -->
+      <select id="lang-switcher" class="lang-select">
+        <option value="en">English</option>
+        <option value="ko">한국어</option>
+        <option value="si">සිංහල</option>
+      </select>
+
+      <button id="refresh-cloud-btn" class="icon-btn" data-i18n-title="sync_title" title="Sync / Fetch Live Cloud Stories">
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+      <button id="bookmarks-tab-btn" class="icon-btn" data-i18n-title="bookmarks_title" title="Saved Bookmarks">
+        <i class="fa-regular fa-bookmark"></i>
+      </button>
+      <button id="export-archive-btn" class="icon-btn" data-i18n-title="export_title" title="Export Archive">
+        <i class="fa-solid fa-download"></i>
+      </button>
+      <button id="import-archive-btn" class="icon-btn" data-i18n-title="import_title" title="Import Archive File">
+        <i class="fa-solid fa-upload"></i>
+      </button>
+      <input type="file" id="import-file-input" accept=".json" style="display: none;" />
+      
+      <button id="open-creator-btn" class="btn btn-red">
+        <i class="fa-solid fa-plus"></i> <span data-i18n="add_story">Add Story</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero-banner"></section>
+
+  <!-- Category Filter Bar -->
+  <nav class="category-bar">
+    <button class="category-btn active" data-category="All" data-i18n="cat_all">All Vaults</button>
+    <button class="category-btn" data-category="Horror" data-i18n="cat_horror">Horror</button>
+    <button class="category-btn" data-category="Dark Fantasy" data-i18n="cat_fantasy">Dark Fantasy</button>
+    <button class="category-btn" data-category="Thriller" data-i18n="cat_thriller">Thriller</button>
+    <button class="category-btn" data-category="Sci-Fi" data-i18n="cat_scifi">Sci-Fi</button>
+    <button class="category-btn" data-category="Mystery" data-i18n="cat_mystery">Mystery</button>
+  
+                <button class="nav-icon-btn suggestions-trigger" id="suggestionsBtn" type="button"
+                        title="Suggestions" aria-label="Suggestions" data-i18n-title="suggestions">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <span class="nav-icon-label" data-i18n="suggestions">Suggestions</span>
+                </button>
+
+</nav>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <div class="section-header">
+      <h2 id="section-title" data-i18n="archived_chronicles">Archived Chronicles</h2>
+      <div class="sort-selector">
+        <label for="sort-by" data-i18n="sort_vault">Sort Vault:</label>
+        <select id="sort-by">
+          <option value="newest" data-i18n="sort_newest">Newest First</option>
+          <option value="popular" data-i18n="sort_popular">Most Liked</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="story-grid" class="story-grid"></div>
+  </main>
+
+    <!-- Suggestions Panel -->
+    <div id="suggestionsModal" class="suggestions-modal" aria-hidden="true">
+        <div class="suggestions-backdrop" data-close-suggestions></div>
+        <section class="suggestions-panel" role="dialog" aria-modal="true" aria-labelledby="suggestionsTitle">
+            <button class="suggestions-close" id="closeSuggestionsBtn" type="button"
+                    aria-label="Close suggestions" data-i18n-title="close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="suggestions-heading">
+                <div class="suggestions-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                <div>
+                    <p class="suggestions-kicker" data-i18n="suggestionsKicker">ARCHIVE GUIDE</p>
+                    <h2 id="suggestionsTitle" data-i18n="suggestionsTitle">Suggestions</h2>
+                    <p data-i18n="suggestionsIntro">Ideas to help readers discover stories and writers build stronger ones.</p>
+                </div>
+            </div>
+
+            <div class="suggestions-grid">
+                <article class="suggestion-category">
+                    <div class="suggestion-category-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+                    <h3 data-i18n="readerSuggestionsTitle">For Readers</h3>
+                    <ul>
+                        <li data-i18n="readerSuggestion1">Explore different categories instead of staying with one genre.</li>
+                        <li data-i18n="readerSuggestion2">Save stories you want to return to with the bookmark feature.</li>
+                        <li data-i18n="readerSuggestion3">Use search and sorting to find stories that match your mood.</li>
+                        <li data-i18n="readerSuggestion4">Leave room for new writers and discover original voices.</li>
+                    </ul>
+                </article>
+
+                <article class="suggestion-category">
+                    <div class="suggestion-category-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <h3 data-i18n="writerSuggestionsTitle">For Writers</h3>
+                    <ul>
+                        <li data-i18n="writerSuggestion1">Give your story a clear title and an engaging opening.</li>
+                        <li data-i18n="writerSuggestion2">Choose the category that best describes your story.</li>
+                        <li data-i18n="writerSuggestion3">Use readable paragraphs and dialogue to keep the story flowing.</li>
+                        <li data-i18n="writerSuggestion4">Add a fitting cover image when you publish your story.</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+    </div>
+
+
+
+  <!-- Reader Modal -->
+  <div id="reader-modal" class="modal hidden">
+    <div class="reader-content">
+      <div class="reader-header-bar">
+        <button id="share-reader-story-btn" class="btn btn-outline">
+          <i class="fa-solid fa-share-nodes"></i> <span data-i18n="share_story">Share Story</span>
+        </button>
+        <button id="close-reader-btn" class="close-btn">&times;</button>
+      </div>
+      <article id="reader-article"></article>
+    </div>
+  </div>
+
+  <!-- Creator Modal -->
+  <div id="creator-modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 data-i18n="submit_title">Submit to Archive</h2>
+        <button id="close-creator-btn" class="close-btn">&times;</button>
+      </div>
+      <form id="story-form">
+        <div class="form-group">
+          <label for="story-title" data-i18n="story_title_label">Story Title</label>
+          <input type="text" id="story-title" data-i18n-placeholder="story_title_placeholder" placeholder="e.g. The Obsidian Key" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="story-author" data-i18n="author_label">Author / Pen Name</label>
+            <input type="text" id="story-author" data-i18n-placeholder="author_placeholder" placeholder="e.g. Anonymous" required />
+          </div>
+
+          <div class="form-group">
+            <label for="story-category" data-i18n="genre_label">Genre</label>
+            <select id="story-category" required>
+              <option value="Horror" data-i18n="cat_horror">Horror</option>
+              <option value="Dark Fantasy" data-i18n="cat_fantasy">Dark Fantasy</option>
+              <option value="Thriller" data-i18n="cat_thriller">Thriller</option>
+              <option value="Sci-Fi" data-i18n="cat_scifi">Sci-Fi</option>
+              <option value="Mystery" data-i18n="cat_mystery">Mystery</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="cover_label">Cover Photo (JPG / PNG File or Web Link)</label>
+          
+          <div class="file-upload-box">
+            <label for="story-file-input" class="file-upload-label">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span id="file-upload-text" data-i18n="upload_text">Click to upload JPG, PNG, or WebP image</span>
+            </label>
+            <input type="file" id="story-file-input" accept="image/jpeg, image/png, image/webp, image/gif" />
+          </div>
+
+          <div class="or-divider" data-i18n="or_divider">— OR —</div>
+
+          <input type="url" id="story-image-url" data-i18n-placeholder="url_placeholder" placeholder="Paste direct image URL (https://...)" />
+          
+          <img id="image-preview" class="image-preview hidden" data-i18n-alt="image_preview_alt" alt="Image Preview" />
+        </div>
+
+        <div class="form-group">
+          <label for="story-content" data-i18n="content_label">Story Content</label>
+          <textarea id="story-content" rows="9" data-i18n-placeholder="content_placeholder" placeholder="Enter your dark tale..." required></textarea>
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn btn-red btn-block">
+          <i class="fa-solid fa-lock"></i> <span data-i18n="submit_btn">Archive Story Live</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden">
+    <i class="fa-solid fa-circle-check" style="color: var(--red-primary)"></i>
+    <span id="toast-message" data-i18n="action_completed">Action completed</span>
+  </div>
+
+  <script>
+    const LOCAL_STORAGE_KEY = 'black_archive_stories_db';
+    
+    const translations = {
+      en: {
+        page_title: "BLACK ARCHIVE - Dark Story Vault",
+        brand_name: "Black Archive",
+        search_placeholder: "Search archive, authors, tags...",
+        add_story: "Add Story",
+        sync_title: "Sync / Fetch Live Cloud Stories",
+        bookmarks_title: "Saved Bookmarks",
+        export_title: "Export Archive",
+        import_title: "Import Archive File",
+        cat_all: "All Vaults",
+        cat_horror: "Horror",
+        cat_fantasy: "Dark Fantasy",
+        cat_thriller: "Thriller",
+        cat_scifi: "Sci-Fi",
+        cat_mystery: "Mystery",
+        archived_chronicles: "Archived Chronicles",
+        sort_vault: "Sort Vault:",
+        sort_newest: "Newest First",
+        sort_popular: "Most Liked",
+        share_story: "Share Story",
+        submit_title: "Submit to Archive",
+        story_title_label: "Story Title",
+        story_title_placeholder: "e.g. The Obsidian Key",
+        author_label: "Author / Pen Name",
+        author_placeholder: "e.g. Anonymous",
+        genre_label: "Genre",
+        cover_label: "Cover Photo (JPG / PNG File or Web Link)",
+        upload_text: "Click to upload JPG, PNG, or WebP image",
+        url_placeholder: "Paste direct image URL (https://...)",
+        content_label: "Story Content",
+        content_placeholder: "Enter your dark tale...",
+        submit_btn: "Archive Story Live",
+        read_featured: "Read Featured Archive",
+        by: "By",
+        min_read: "min read",
+        no_stories: "No dark chronicles found in this vault section.",
+        synced_toast: "Cloud synced! All devices updated.",
+        bookmark_added: "Saved to your bookmarks!",
+        bookmark_removed: "Removed from bookmarks.",
+        link_copied: "Story link copied to clipboard!",
+        or_divider: "— OR —",
+        image_preview_alt: "Image Preview",
+        action_completed: "Action completed",
+        category_labels: {
+          "All": "All Vaults",
+          "Horror": "Horror",
+          "Dark Fantasy": "Dark Fantasy",
+          "Thriller": "Thriller",
+          "Sci-Fi": "Sci-Fi",
+          "Mystery": "Mystery"
+        }
+      },
+      ko: {
+        page_title: "BLACK ARCHIVE - 어두운 이야기 보관소",
+        brand_name: "Black Archive",
+        search_placeholder: "아카이브, 작가, 태그 검색...",
+        add_story: "스토리 추가",
+        sync_title: "클라우드 스토리 동기화 / 가져오기",
+        bookmarks_title: "저장된 북마크",
+        export_title: "아카이브 내보내기",
+        import_title: "아카이브 파일 가져오기",
+        cat_all: "전체 보관소",
+        cat_horror: "호러",
+        cat_fantasy: "다크 판타지",
+        cat_thriller: "스릴러",
+        cat_scifi: "SF",
+        cat_mystery: "미스터리",
+        archived_chronicles: "보관된 연대기",
+        sort_vault: "정렬 기준:",
+        sort_newest: "최신순",
+        sort_popular: "인기순",
+        share_story: "스토리 공유",
+        submit_title: "아카이브에 제출",
+        story_title_label: "스토리 제목",
+        story_title_placeholder: "예: 흑요석 열쇠",
+        author_label: "작가 / 필명",
+        author_placeholder: "예: 익명",
+        genre_label: "장르",
+        cover_label: "커버 사진 (JPG / PNG 파일 또는 웹 링크)",
+        upload_text: "클릭하여 JPG, PNG, WebP 이미지 업로드",
+        url_placeholder: "직접 이미지 URL 붙여넣기 (https://...)",
+        content_label: "스토리 내용",
+        content_placeholder: "당신의 어두운 이야기를 입력하세요...",
+        submit_btn: "스토리 라이브 게시",
+        read_featured: "추천 아카이브 읽기",
+        by: "작성자",
+        min_read: "분 소요",
+        no_stories: "이 보관소 섹션에서 연대기를 찾을 수 없습니다.",
+        synced_toast: "클라우드 동기화 완료! 모든 기기가 업데이트되었습니다.",
+        bookmark_added: "북마크에 저장되었습니다!",
+        bookmark_removed: "북마크에서 삭제되었습니다.",
+        link_copied: "스토리 링크가 클립보드에 복사되었습니다!",
+        or_divider: "— 또는 —",
+        image_preview_alt: "이미지 미리보기",
+        action_completed: "작업이 완료되었습니다.",
+        category_labels: {
+          "All": "전체 보관소",
+          "Horror": "호러",
+          "Dark Fantasy": "다크 판타지",
+          "Thriller": "스릴러",
+          "Sci-Fi": "SF",
+          "Mystery": "미스터리"
+        }
+      },
+      si: {
+        page_title: "BLACK ARCHIVE - අඳුරු කතා සංරක්ෂිතය",
+        brand_name: "Black Archive",
+        search_placeholder: "සංරක්ෂිතය, කතුවරුන්, ටැග් සොයන්න...",
+        add_story: "කතාවක් එක් කරන්න",
+        sync_title: "ක්ලවුඩ් කතා සමමුහුර්ත / ලබාගන්න",
+        bookmarks_title: "සුරකින ලද පිටු සලකුණු",
+        export_title: "සංරක්ෂිතය අපනයනය කරන්න",
+        import_title: "සංරක්ෂිත ගොනුව ආනයනය කරන්න",
+        cat_all: "සියලුම සංරක්ෂිත",
+        cat_horror: "භීෂණය",
+        cat_fantasy: "අඳුරු ෆැන්ටසි",
+        cat_thriller: "ත්‍රාසජනක",
+        cat_scifi: "විද්‍යා ප්‍රබන්ධ",
+        cat_mystery: "අභිරහස",
+        archived_chronicles: "සංරක්ෂිත කතා",
+        sort_vault: "වර්ග කරන්න:",
+        sort_newest: "අලුත්ම ඒවා පළමුව",
+        sort_popular: "වැඩිම කැමැත්ත",
+        share_story: "කතාව බෙදාගන්න",
+        submit_title: "සංරක්ෂිතයට ඉදිරිපත් කරන්න",
+        story_title_label: "කතාවේ නම",
+        story_title_placeholder: "උදා: කළු මැණික් යතුර",
+        author_label: "කර්තෘ / ලේඛන නාමය",
+        author_placeholder: "උදා: නිර්නාමික",
+        genre_label: "ප්‍රභේදය",
+        cover_label: "කවර ඡායාරූපය (JPG / PNG ගොනුවක් හෝ වෙබ් සබැඳියක්)",
+        upload_text: "JPG, PNG හෝ WebP රූපයක් උඩුගත කිරීමට ක්ලික් කරන්න",
+        url_placeholder: "සෘජු රූප URL එක මෙහි අලවන්න (https://...)",
+        content_label: "කතාවේ අන්තර්ගතය",
+        content_placeholder: "ඔබේ අඳුරු කතාව මෙහි ඇතුළත් කරන්න...",
+        submit_btn: "කතාව සංරක්ෂිතයට ප්‍රකාශ කරන්න",
+        read_featured: "විශේෂ කතාව කියවන්න",
+        by: "කර්තෘ",
+        min_read: "මිනිත්තු කියවීම",
+        no_stories: "මෙම සංරක්ෂිත කොටසේ අඳුරු කතා හමු නොවීය.",
+        synced_toast: "ක්ලවුඩ් සමමුහුර්ත කිරීම සම්පූර්ණයි! සියලු උපාංග යාවත්කාලීන විය.",
+        bookmark_added: "ඔබේ පිටු සලකුණු වෙත සුරකින ලදී!",
+        bookmark_removed: "පිටු සලකුණු වලින් ඉවත් කරන ලදී.",
+        link_copied: "කතාවේ සබැඳිය clipboard වෙත පිටපත් කරන ලදී!",
+        or_divider: "— හෝ —",
+        image_preview_alt: "රූප පෙරදසුන",
+        action_completed: "ක්‍රියාව සම්පූර්ණයි.",
+        category_labels: {
+          "All": "සියලුම සංරක්ෂිත",
+          "Horror": "භීෂණය",
+          "Dark Fantasy": "අඳුරු ෆැන්ටසි",
+          "Thriller": "ත්‍රාසජනක",
+          "Sci-Fi": "විද්‍යා ප්‍රබන්ධ",
+          "Mystery": "අභිරහස"
+        }
+      }
+    ,
+    welcomeEyebrow: { en: "WELCOME TO", ko: "환영합니다", si: "සාදරයෙන් පිළිගනිමු" },
+    siteName: { en: "BLACK ARCHIVE", ko: "BLACK ARCHIVE", si: "BLACK ARCHIVE" },
+    welcomeSubtitle: { en: "Dark Story Vault", ko: "어두운 이야기 보관소", si: "අඳුරු කතා ගබඩාව" },
+    welcomeMessage: { en: "Enter a vault of dark stories, mysterious worlds, and unforgettable characters.", ko: "어두운 이야기와 신비로운 세계, 잊을 수 없는 캐릭터의 보관소로 들어오세요.", si: "අඳුරු කතා, අභිරහස් ලෝක සහ අමතක නොවන චරිත ඇති ගබඩාවට ඇතුළු වන්න." },
+    readerName: { en: "Reader: RODI", ko: "독자: RODI", si: "පාඨකයා: RODI" },
+    welcomeContinue: { en: "OK — ENTER THE ARCHIVE", ko: "확인 — 보관소 입장", si: "හරි — ගබඩාවට ඇතුළු වන්න" },
+    suggestions: { en: "Suggestions", ko: "추천", si: "යෝජනා" },
+    suggestionsKicker: { en: "ARCHIVE GUIDE", ko: "보관소 가이드", si: "ගබඩා මාර්ගෝපදේශය" },
+    suggestionsTitle: { en: "Suggestions", ko: "추천", si: "යෝජනා" },
+    suggestionsIntro: { en: "Ideas to help readers discover stories and writers build stronger ones.", ko: "독자가 이야기를 발견하고 작가가 더 좋은 이야기를 만드는 데 도움이 되는 제안입니다.", si: "පාඨකයන්ට කතා සොයා ගැනීමටත් ලේඛකයන්ට වඩා හොඳ කතා නිර්මාණය කිරීමටත් උපකාරී අදහස්." },
+    readerSuggestionsTitle: { en: "For Readers", ko: "독자를 위한 제안", si: "පාඨකයන් සඳහා" },
+    readerSuggestion1: { en: "Explore different categories instead of staying with one genre.", ko: "한 장르에만 머물지 말고 다양한 카테고리를 탐색해 보세요.", si: "එක් ප්‍රභේදයකට පමණක් සීමා නොවී විවිධ කාණ්ඩ ගවේෂණය කරන්න." },
+    readerSuggestion2: { en: "Save stories you want to return to with the bookmark feature.", ko: "다시 읽고 싶은 이야기는 북마크 기능으로 저장하세요.", si: "නැවත කියවීමට අවශ්‍ය කතා පිටු සලකුණු මඟින් සුරකින්න." },
+    readerSuggestion3: { en: "Use search and sorting to find stories that match your mood.", ko: "검색과 정렬 기능으로 지금 원하는 분위기의 이야기를 찾아보세요.", si: "සෙවුම් සහ වර්ග කිරීම භාවිතා කර ඔබේ මනෝභාවයට ගැළපෙන කතා සොයා ගන්න." },
+    readerSuggestion4: { en: "Leave room for new writers and discover original voices.", ko: "새로운 작가에게 기회를 주고 독창적인 목소리를 발견해 보세요.", si: "නව ලේඛකයන්ට අවස්ථාවක් දී නව නිර්මාණාත්මක හඬ සොයා ගන්න." },
+    writerSuggestionsTitle: { en: "For Writers", ko: "작가를 위한 제안", si: "ලේඛකයන් සඳහා" },
+    writerSuggestion1: { en: "Give your story a clear title and an engaging opening.", ko: "명확한 제목과 흥미로운 도입부를 만들어 보세요.", si: "ඔබේ කතාවට පැහැදිලි නමක් සහ ආකර්ෂණීය ආරම්භයක් ලබා දෙන්න." },
+    writerSuggestion2: { en: "Choose the category that best describes your story.", ko: "이야기를 가장 잘 설명하는 카테고리를 선택하세요.", si: "ඔබේ කතාව වඩාත් හොඳින් විස්තර කරන කාණ්ඩය තෝරන්න." },
+    writerSuggestion3: { en: "Use readable paragraphs and dialogue to keep the story flowing.", ko: "읽기 쉬운 문단과 대화를 사용해 이야기의 흐름을 살려 보세요.", si: "කියවීමට පහසු ඡේද සහ සංවාද භාවිතා කර කතාවේ ගලායාම පවත්වා ගන්න." },
+    writerSuggestion4: { en: "Add a fitting cover image when you publish your story.", ko: "이야기를 게시할 때 어울리는 표지 이미지를 추가하세요.", si: "ඔබේ කතාව පළ කරන විට ගැළපෙන ආවරණ රූපයක් එක් කරන්න." },
+    close: { en: "Close", ko: "닫기", si: "වසන්න" }};
+
+    let currentLang = 'en';
+
+    const initialStories = [
+      {
+        id: '1',
+        title: 'Whispers in the Obsidian Citadel',
+        author: 'Vespera Blood',
+        category: 'Dark Fantasy',
+        image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000',
+        content: 'The ancient red banners hung motionless in the crypts beneath the Obsidian Citadel. Every century, the crimson sigils flared with unholy fire. Princess Lyra held her silver blade as shadows detached themselves from the stonework and began to speak...',
+        likes: 89,
+        bookmarked: false,
+        date: new Date().toISOString()
+      },
+      {
+        id: '2',
+        title: 'The Crimson Protocol',
+        author: 'Kaelen Voss',
+        category: 'Sci-Fi',
+        image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1000',
+        content: 'Deep within Sector 9, the emergency sirens bathed the metallic corridor in pulse-red light. Protocol 7 was initiated. "We cannot let the entity reach the core," Kaelen whispered into his comms, reloading his plasma coil.',
+        likes: 64,
+        bookmarked: true,
+        date: new Date().toISOString()
+      }
+    ];
+
+    let currentCategory = 'All';
+    let showingBookmarksOnly = false;
+    let activeStoryId = null;
+    let uploadedImageBase64 = null;
+
+    const storyGrid = document.getElementById('story-grid');
+    const heroBanner = document.getElementById('hero-banner');
+    const searchInput = document.getElementById('search-input');
+    const sortSelect = document.getElementById('sort-by');
+    const creatorModal = document.getElementById('creator-modal');
+    const readerModal = document.getElementById('reader-modal');
+    const openCreatorBtn = document.getElementById('open-creator-btn');
+    const closeCreatorBtn = document.getElementById('close-creator-btn');
+    const closeReaderBtn = document.getElementById('close-reader-btn');
+    const storyForm = document.getElementById('story-form');
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    const bookmarksTabBtn = document.getElementById('bookmarks-tab-btn');
+    const exportBtn = document.getElementById('export-archive-btn');
+    const importBtn = document.getElementById('import-archive-btn');
+    const importFileInput = document.getElementById('import-file-input');
+    const shareReaderStoryBtn = document.getElementById('share-reader-story-btn');
+    const refreshCloudBtn = document.getElementById('refresh-cloud-btn');
+    const langSwitcher = document.getElementById('lang-switcher');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+
+    const storyFileInput = document.getElementById('story-file-input');
+    const storyImageUrl = document.getElementById('story-image-url');
+    const fileUploadText = document.getElementById('file-upload-text');
+    const imagePreview = document.getElementById('image-preview');
+
+    function applyLanguage(lang) {
+      if (!translations[lang]) lang = 'en';
+      currentLang = lang;
+      document.documentElement.lang = lang === 'si' ? 'si' : lang;
+      document.title = translations[lang].page_title;
+      localStorage.setItem('black_archive_language', lang);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang][key]) {
+          el.placeholder = translations[lang][key];
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        if (translations[lang][key]) {
+          el.title = translations[lang][key];
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+        const key = el.getAttribute('data-i18n-alt');
+        if (translations[lang][key]) {
+          el.alt = translations[lang][key];
+        }
+      });
+
+      const storiesData = loadLocalStories();
+      if (storiesData.length > 0) renderHero(storiesData[0]);
+      renderStories();
+    }
+
+    langSwitcher.onchange = (e) => {
+      applyLanguage(e.target.value);
+    };
+
+    function getCategoryLabel(category) {
+      return translations[currentLang].category_labels[category] || category;
+    }
+
+    function loadLocalStories() {
+      const data = localStorage.getItem(LOCAL_STORAGE_KEY);
+      return data ? JSON.parse(data) : initialStories;
+    }
+
+    function saveLocalStories(stories) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(stories));
+    }
+
+    async function fetchCloudStories() {
+      try {
+        refreshCloudBtn.querySelector('i').classList.add('fa-spin');
+        const response = await fetch('https://api.myjson.online/v1/records/4b79c3d4-20b1-4f40-8b1b-15f1f83c139b');
+        if (response.ok) {
+          const resData = await response.json();
+          if (resData && resData.data && resData.data.stories) {
+            saveLocalStories(resData.data.stories);
+            renderHero(resData.data.stories[0]);
+            renderStories();
+            showToast(translations[currentLang].synced_toast);
+          }
+        }
+      } catch (err) {
+        console.log("Offline mode, loading local data:", err);
+      } finally {
+        refreshCloudBtn.querySelector('i').classList.remove('fa-spin');
+      }
+    }
+
+    async function pushToCloud(allStories) {
+      try {
+        await fetch('https://api.myjson.online/v1/records/4b79c3d4-20b1-4f40-8b1b-15f1f83c139b', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: { stories: allStories } })
+        });
+      } catch (err) {
+        console.log("Offline mode, saved locally.", err);
+      }
+    }
+
+    function showToast(msg) {
+      toastMessage.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    function computeReadTime(text) {
+      const words = text.trim().split(/\s+/).length;
+      return `${Math.ceil(words / 200)} ${translations[currentLang].min_read}`;
+    }
+
+    storyFileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          uploadedImageBase64 = event.target.result;
+          imagePreview.src = uploadedImageBase64;
+          imagePreview.classList.remove('hidden');
+          fileUploadText.textContent = `Selected: ${file.name}`;
+          storyImageUrl.value = '';
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    storyImageUrl.oninput = () => {
+      if (storyImageUrl.value.trim() !== '') {
+        uploadedImageBase64 = null;
+        storyFileInput.value = '';
+        fileUploadText.textContent = translations[currentLang].upload_text;
+        imagePreview.src = storyImageUrl.value.trim();
+        imagePreview.classList.remove('hidden');
+      } else if (!uploadedImageBase64) {
+        imagePreview.classList.add('hidden');
+      }
+    };
+
+    function renderHero(story) {
+      if (!story) {
+        heroBanner.style.display = 'none';
+        return;
+      }
+      heroBanner.style.display = 'flex';
+      heroBanner.style.backgroundImage = `url('${story.image}')`;
+      heroBanner.innerHTML = `
+        <div class="hero-overlay"></div>
+        <div class="hero-details">
+          <span class="tag">${getCategoryLabel(story.category)}</span>
+          <h1>${escapeHTML(story.title)}</h1>
+          <div class="hero-meta">${translations[currentLang].by} ${escapeHTML(story.author)} • ${computeReadTime(story.content)}</div>
+          <button class="btn btn-red" onclick="openReader('${story.id}')">
+            <i class="fa-solid fa-book-open"></i> ${translations[currentLang].read_featured}
+          </button>
+        </div>
+      `;
+    }
+
+    function renderStories() {
+      let stories = loadLocalStories();
+
+      const query = searchInput.value.toLowerCase().trim();
+      if (query) {
+        stories = stories.filter(s => 
+          s.title.toLowerCase().includes(query) || 
+          s.author.toLowerCase().includes(query) ||
+          s.category.toLowerCase().includes(query)
+        );
+      }
+
+      if (currentCategory !== 'All') {
+        stories = stories.filter(s => s.category === currentCategory);
+      }
+
+      if (showingBookmarksOnly) {
+        stories = stories.filter(s => s.bookmarked);
+      }
+
+      const sortBy = sortSelect.value;
+      if (sortBy === 'popular') {
+        stories.sort((a, b) => b.likes - a.likes);
+      } else {
+        stories.sort((a, b) => new Date(b.date) - new Date(a.date));
+      }
+
+      storyGrid.innerHTML = '';
+
+      if (stories.length === 0) {
+        storyGrid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted); padding: 50px;">${translations[currentLang].no_stories}</p>`;
+        return;
+      }
+
+      stories.forEach(story => {
+        const card = document.createElement('div');
+        card.className = 'story-card';
+        card.innerHTML = `
+          <div class="card-img-wrapper" onclick="openReader('${story.id}')">
+            <img src="${story.image}" alt="${escapeHTML(story.title)}" onerror="this.src='https://via.placeholder.com/400x200/121216/ffffff?text=Black+Archive'"/>
+          </div>
+          <div class="card-body">
+            <span class="tag" style="width: fit-content;">${getCategoryLabel(story.category)}</span>
+            <h3 class="card-title" onclick="openReader('${story.id}')">${escapeHTML(story.title)}</h3>
+            <p class="card-snippet">${escapeHTML(story.content)}</p>
+            <div class="card-footer">
+              <span>${translations[currentLang].by} ${escapeHTML(story.author)}</span>
+              <div class="card-actions">
+                <i class="fa-solid fa-heart ${story.likes > 0 ? 'active-heart' : ''}" onclick="toggleLike('${story.id}', event)"></i> ${story.likes}
+                <i class="fa-${story.bookmarked ? 'solid' : 'regular'} fa-bookmark ${story.bookmarked ? 'active-bookmark' : ''}" onclick="toggleBookmark('${story.id}', event)"></i>
+                <i class="fa-solid fa-share-nodes" onclick="shareStory('${story.id}', event)"></i>
+              </div>
+            </div>
+          </div>
+        `;
+        storyGrid.appendChild(card);
+      });
+    }
+
+    function openReader(id) {
+      const stories = loadLocalStories();
+      const story = stories.find(s => s.id === id);
+      if (!story) return;
+
+      activeStoryId = id;
+      const article = document.getElementById('reader-article');
+      article.innerHTML = `
+        <span class="tag">${getCategoryLabel(story.category)}</span>
+        <h1>${escapeHTML(story.title)}</h1>
+        <div class="meta-info">${translations[currentLang].by} ${escapeHTML(story.author)} • ${computeReadTime(story.content)}</div>
+        <img src="${story.image}" alt="${escapeHTML(story.title)}" />
+        <div class="body-text">${escapeHTML(story.content)}</div>
+      `;
+
+      readerModal.classList.remove('hidden');
+    }
+
+    async function toggleLike(id, event) {
+      if (event) event.stopPropagation();
+      const stories = loadLocalStories();
+      const story = stories.find(s => s.id === id);
+      if (story) {
+        story.likes += 1;
+        saveLocalStories(stories);
+        renderStories();
+        await pushToCloud(stories);
+      }
+    }
+
+    function toggleBookmark(id, event) {
+      if (event) event.stopPropagation();
+      const stories = loadLocalStories();
+      const story = stories.find(s => s.id === id);
+      if (story) {
+        story.bookmarked = !story.bookmarked;
+        saveLocalStories(stories);
+        renderStories();
+        showToast(story.bookmarked ? translations[currentLang].bookmark_added : translations[currentLang].bookmark_removed);
+      }
+    }
+
+    function shareStory(id, event) {
+      if (event) event.stopPropagation();
+      const stories = loadLocalStories();
+      const story = stories.find(s => s.id === id);
+      if (!story) return;
+
+      const shareData = {
+        title: `Black Archive - ${story.title}`,
+        text: `Read "${story.title}" by ${story.author} on Black Archive:\n\n${story.content.substring(0, 150)}...`,
+        url: window.location.href.split('?')[0] + `?story=${story.id}`
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+        showToast(translations[currentLang].link_copied);
+      }
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    exportBtn.onclick = () => {
+      const stories = loadLocalStories();
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(stories, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "black_archive_stories.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    };
+
+    importBtn.onclick = () => importFileInput.click();
+
+    importFileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const importedStories = JSON.parse(event.target.result);
+          if (Array.isArray(importedStories)) {
+            saveLocalStories(importedStories);
+            renderHero(importedStories[0]);
+            renderStories();
+            await pushToCloud(importedStories);
+            showToast(translations[currentLang].synced_toast);
+          }
+        } catch (err) {
+          alert("Error reading file: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    openCreatorBtn.onclick = () => creatorModal.classList.remove('hidden');
+    closeCreatorBtn.onclick = () => creatorModal.classList.add('hidden');
+    closeReaderBtn.onclick = () => readerModal.classList.add('hidden');
+    shareReaderStoryBtn.onclick = () => shareStory(activeStoryId);
+    refreshCloudBtn.onclick = fetchCloudStories;
+
+    searchInput.oninput = renderStories;
+    sortSelect.onchange = renderStories;
+
+    categoryBtns.forEach(btn => {
+      btn.onclick = () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        showingBookmarksOnly = false;
+        bookmarksTabBtn.classList.remove('active');
+        renderStories();
+      };
+    });
+
+    bookmarksTabBtn.onclick = () => {
+      showingBookmarksOnly = !showingBookmarksOnly;
+      bookmarksTabBtn.classList.toggle('active', showingBookmarksOnly);
+      renderStories();
+    };
+
+    storyForm.onsubmit = async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+
+      const finalImage = uploadedImageBase64 || storyImageUrl.value.trim() || 'https://via.placeholder.com/400x200/121216/ffffff?text=Black+Archive';
+
+      const newStory = {
+        id: Date.now().toString(),
+        title: document.getElementById('story-title').value,
+        author: document.getElementById('story-author').value,
+        category: document.getElementById('story-category').value,
+        image: finalImage,
+        content: document.getElementById('story-content').value,
+        likes: 0,
+        bookmarked: false,
+        date: new Date().toISOString()
+      };
+
+      const stories = loadLocalStories();
+      stories.unshift(newStory);
+      saveLocalStories(stories);
+
+      await pushToCloud(stories);
+
+      storyForm.reset();
+      uploadedImageBase64 = null;
+      imagePreview.classList.add('hidden');
+      fileUploadText.textContent = translations[currentLang].upload_text;
+      creatorModal.classList.add('hidden');
+
+      submitBtn.disabled = false;
+
+      renderHero(newStory);
+      renderStories();
+      showToast(translations[currentLang].synced_toast);
+    };
+
+    setInterval(fetchCloudStories, 15000);
+
+    const storiesData = loadLocalStories();
+    renderHero(storiesData[0]);
+    renderStories();
+    fetchCloudStories();
+  
+        // Welcome screen and suggestions panel
+        (function () {
+            const welcomeOverlay = document.getElementById("welcomeOverlay");
+            const welcomeOkBtn = document.getElementById("welcomeOkBtn");
+            const suggestionsBtn = document.getElementById("suggestionsBtn");
+            const suggestionsModal = document.getElementById("suggestionsModal");
+            const closeSuggestionsBtn = document.getElementById("closeSuggestionsBtn");
+
+            function closeWelcome() {
+                if (!welcomeOverlay) return;
+                welcomeOverlay.classList.add("is-hidden");
+                document.body.classList.remove("welcome-locked");
+                try { localStorage.setItem("blackArchiveWelcomeSeen", "1"); } catch (e) {}
+            }
+
+            // The visitor must explicitly press OK the first time.
+            let hasSeenWelcome = false;
+            try { hasSeenWelcome = localStorage.getItem("blackArchiveWelcomeSeen") === "1"; } catch (e) {}
+
+            if (welcomeOverlay) {
+                if (hasSeenWelcome) {
+                    welcomeOverlay.classList.add("is-hidden");
+                } else {
+                    document.body.classList.add("welcome-locked");
+                }
+            }
+
+            if (welcomeOkBtn) {
+                welcomeOkBtn.addEventListener("click", closeWelcome);
+            }
+
+            function openSuggestions() {
+                if (!suggestionsModal) return;
+                suggestionsModal.classList.add("is-open");
+                suggestionsModal.setAttribute("aria-hidden", "false");
+                document.body.classList.add("modal-open");
+            }
+
+            function closeSuggestions() {
+                if (!suggestionsModal) return;
+                suggestionsModal.classList.remove("is-open");
+                suggestionsModal.setAttribute("aria-hidden", "true");
+                document.body.classList.remove("modal-open");
+            }
+
+            if (suggestionsBtn) suggestionsBtn.addEventListener("click", openSuggestions);
+            if (closeSuggestionsBtn) closeSuggestionsBtn.addEventListener("click", closeSuggestions);
+
+            if (suggestionsModal) {
+                suggestionsModal.querySelectorAll("[data-close-suggestions]").forEach(el => {
+                    el.addEventListener("click", closeSuggestions);
+                });
+            }
+
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                    if (suggestionsModal && suggestionsModal.classList.contains("is-open")) closeSuggestions();
+                }
+            });
+        })();
+
+</script>
+</body>
+</html>
